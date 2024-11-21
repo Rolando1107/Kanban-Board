@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Serve static files (frontend) if in production
-app.use(express.static(path.resolve(__dirname, '../client/dist')));
+app.use(express.static(path.resolve(__dirname, '../../client/dist')));
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -26,7 +26,7 @@ app.use(routes);
 // Serve frontend for any unknown route (React Router support)
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (_, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
+    res.sendFile(path.resolve(__dirname, '../../client/dist/index.html'));
   });
 }
 
