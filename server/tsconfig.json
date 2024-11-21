@@ -1,15 +1,15 @@
 {
   "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "module": "es2015", // Ensure compatibility with Node.js
-    "target": "es6", // Set appropriate target for compatibility
-    "rootDir": "./src", // Specify the root folder for source files
-    "outDir": "./dist", // Output folder for compiled files
-    "strict": true, // Enable strict type-checking options
-    "esModuleInterop": true, // Enable compatibility between CommonJS and ES Modules
-    "skipLibCheck": true, // Skip type checking of declaration files
-    "typeRoots": ["./node_modules/@types", "./src/types"] // Include custom and package types
-  },
-  "include": ["src/**/*"], // Include all files under src
-  "exclude": ["node_modules", "dist"] // Exclude unnecessary folders
-}
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "Node16",
+      "rootDir": "./src",
+      "outDir": "./dist",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "moduleResolution": "Node16"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+  }

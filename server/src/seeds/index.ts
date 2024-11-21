@@ -1,23 +1,18 @@
-import { seedUsers } from './user-seeds.js';
-import { seedTickets } from './ticket-seeds.js';
 import { sequelize } from '../models/index.js';
 
-const seedAll = async (): Promise<void> => {
-  try {
-    await sequelize.sync({ force: true });
-    console.log('\n----- DATABASE SYNCED -----\n');
-    
-    await seedUsers();
-    console.log('\n----- USERS SEEDED -----\n');
-    
-    await seedTickets();
-    console.log('\n----- TICKETS SEEDED -----\n');
-    
-    process.exit(0);
-  } catch (error) {
-    console.error('Error seeding database:', error);
+(async () => {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Seeding should not be run in production.');
     process.exit(1);
   }
-};
 
-seedAll();
+  try {
+    await sequelize.sync({ force: true });
+    console.log('Database synchronized successfully!');
+    // Add your seed logic here
+  } catch (error) {
+    console.error('Error seeding database:', error);
+  } finally {
+    process.exit(0);
+  }
+})();

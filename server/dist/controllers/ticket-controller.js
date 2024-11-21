@@ -1,18 +1,9 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { Ticket } from '../models/ticket.js';
 import { User } from '../models/user.js';
 // GET /tickets
-export const getAllTickets = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const getAllTickets = async (_req, res) => {
     try {
-        const tickets = yield Ticket.findAll({
+        const tickets = await Ticket.findAll({
             include: [
                 {
                     model: User,
@@ -26,12 +17,12 @@ export const getAllTickets = (_req, res) => __awaiter(void 0, void 0, void 0, fu
     catch (error) {
         res.status(500).json({ message: error.message });
     }
-});
+};
 // GET /tickets/:id
-export const getTicketById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const getTicketById = async (req, res) => {
     const { id } = req.params;
     try {
-        const ticket = yield Ticket.findByPk(id, {
+        const ticket = await Ticket.findByPk(id, {
             include: [
                 {
                     model: User,
@@ -50,30 +41,30 @@ export const getTicketById = (req, res) => __awaiter(void 0, void 0, void 0, fun
     catch (error) {
         res.status(500).json({ message: error.message });
     }
-});
+};
 // POST /tickets
-export const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const createTicket = async (req, res) => {
     const { name, status, description, assignedUserId } = req.body;
     try {
-        const newTicket = yield Ticket.create({ name, status, description, assignedUserId });
+        const newTicket = await Ticket.create({ name, status, description, assignedUserId });
         res.status(201).json(newTicket);
     }
     catch (error) {
         res.status(400).json({ message: error.message });
     }
-});
+};
 // PUT /tickets/:id
-export const updateTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const updateTicket = async (req, res) => {
     const { id } = req.params;
     const { name, status, description, assignedUserId } = req.body;
     try {
-        const ticket = yield Ticket.findByPk(id);
+        const ticket = await Ticket.findByPk(id);
         if (ticket) {
             ticket.name = name;
             ticket.status = status;
             ticket.description = description;
             ticket.assignedUserId = assignedUserId;
-            yield ticket.save();
+            await ticket.save();
             res.json(ticket);
         }
         else {
@@ -83,14 +74,14 @@ export const updateTicket = (req, res) => __awaiter(void 0, void 0, void 0, func
     catch (error) {
         res.status(400).json({ message: error.message });
     }
-});
+};
 // DELETE /tickets/:id
-export const deleteTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const deleteTicket = async (req, res) => {
     const { id } = req.params;
     try {
-        const ticket = yield Ticket.findByPk(id);
+        const ticket = await Ticket.findByPk(id);
         if (ticket) {
-            yield ticket.destroy();
+            await ticket.destroy();
             res.json({ message: 'Ticket deleted' });
         }
         else {
@@ -100,4 +91,4 @@ export const deleteTicket = (req, res) => __awaiter(void 0, void 0, void 0, func
     catch (error) {
         res.status(500).json({ message: error.message });
     }
-});
+};

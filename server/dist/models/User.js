@@ -1,22 +1,11 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { DataTypes, Model } from 'sequelize';
 import bcrypt from 'bcrypt';
 // Define the User class extending Sequelize's Model
 export class User extends Model {
     // Method to hash and set the password for the user
-    setPassword(password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const saltRounds = 10;
-            this.password = yield bcrypt.hash(password, saltRounds);
-        });
+    async setPassword(password) {
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(password, saltRounds);
     }
 }
 // Define the UserFactory function to initialize the User model
@@ -46,15 +35,15 @@ export function UserFactory(sequelize) {
         sequelize, // The Sequelize instance that connects to PostgreSQL
         hooks: {
             // Before creating a new user, hash and set the password
-            beforeCreate: (user) => __awaiter(this, void 0, void 0, function* () {
-                yield user.setPassword(user.password);
-            }),
+            beforeCreate: async (user) => {
+                await user.setPassword(user.password);
+            },
             // Before updating a user, hash and set the new password if it has changed
-            beforeUpdate: (user) => __awaiter(this, void 0, void 0, function* () {
+            beforeUpdate: async (user) => {
                 if (user.changed('password')) {
-                    yield user.setPassword(user.password);
+                    await user.setPassword(user.password);
                 }
-            }),
+            },
         }
     });
     return User; // Return the initialized User model
