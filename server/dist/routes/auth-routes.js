@@ -1,12 +1,21 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { Router } from 'express';
 import { User } from '../models/user.js'; // Import the User model
 import jwt from 'jsonwebtoken'; // Import the JSON Web Token library
 import bcrypt from 'bcrypt'; // Import the bcrypt library for password hashing
 // Login function to authenticate a user
-export const login = async (req, res) => {
+export const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body; // Extract username and password from request body
     // Find the user in the database by username
-    const user = await User.findOne({
+    const user = yield User.findOne({
         where: { username },
     });
     // If user is not found, send an authentication failed response
@@ -14,7 +23,7 @@ export const login = async (req, res) => {
         return res.status(401).json({ message: 'Authentication failed' });
     }
     // Compare the provided password with the stored hashed password
-    const passwordIsValid = await bcrypt.compare(password, user.password);
+    const passwordIsValid = yield bcrypt.compare(password, user.password);
     // If password is invalid, send an authentication failed response
     if (!passwordIsValid) {
         return res.status(401).json({ message: 'Authentication failed' });
@@ -24,11 +33,11 @@ export const login = async (req, res) => {
     // Generate a JWT token for the authenticated user
     const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
     return res.json({ token }); // Send the token as a JSON response
-};
-export const signUp = async (req, res) => {
+});
+export const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
-        const newUser = await User.create({ username, password });
+        const newUser = yield User.create({ username, password });
         console.log(newUser);
         // Get the secret key from environment variables
         const secretKey = process.env.JWT_SECRET_KEY || '';
@@ -40,7 +49,7 @@ export const signUp = async (req, res) => {
     catch (error) {
         res.status(400).json({ message: error.message });
     }
-};
+});
 // Create a new router instance
 const router = Router();
 // POST /login - Login a user
